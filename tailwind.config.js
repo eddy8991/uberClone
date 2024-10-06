@@ -1,4 +1,8 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-dupe-keys */
 /** @type {import('tailwindcss').Config} */
+// tailwind.config.js
+
 // tailwind.config.js
 
 module.exports = {
