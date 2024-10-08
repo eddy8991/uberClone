@@ -50,7 +50,7 @@ const SignIn = () =>{
                     <CustomButton title="Sign Up" onPress={onSignInPress} className="mt-6"/>
 
                     <OAuth/>
-                    <Link href='/sign-in/>' className="text-center text-lg text-general-200 mt-10">
+                    <Link href="/sign-up" className="text-center text-lg text-general-200 mt-10">
                         <Text>Dont have an account?</Text>
                         <Text className="text-primary-500">Sign Up</Text>
                     </Link>
