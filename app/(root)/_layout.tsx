@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { Stack } from "expo-router";
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 const Layout = () => {
   return (
     <Stack>

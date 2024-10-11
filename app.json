@@ -22,13 +22,13 @@
       }
     },
     "web": {
-      "bundler": "metro",
-      "output": "static",
+      "bundler": "metro", 
+      "output": "server",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
-    ],
+      ["expo-router", { "origin":"https://uberclone.com/" }]
+  ],
     "experiments": {
       "typedRoutes": true
     }
