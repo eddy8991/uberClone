@@ -1,9 +1,15 @@
 /* eslint-disable prettier/prettier */
+import GoogleTextInput from '@/components/GoogleTextInput'
 import RideCard from '@/components/RideCard'
-import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
-import { Link } from 'expo-router'
-import { FlatList, Text, View } from 'react-native'
+import { icons, images } from '@/constants'
+import { useUser } from '@clerk/clerk-expo'
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View,} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Map from '@/components/Map'
+import { useLocationStore } from '@/store/indes'
+import { useEffect, useState } from 'react'
+import * as Location from "expo-location"
+
 
 const recentRides = [
   {
@@ -105,11 +111,75 @@ const recentRides = [
 ]
 
 export default function Page() {
+  const { setUserLocation, setDestinationLocation } = useLocationStore();
   const { user } = useUser()
+  const loading = false
+
+  const[ hasPermissions, setHasPermissions] = useState(false);
+
+  const handleSignOut = () => {}
+  const handleDestination = () => {}
+
+  useEffect( () => {
+    const requestLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if(status !== "granted"){
+        setHasPermissions(false)
+        return;
+      }
+    }
+    let location = await Location.getCurrentPositionAsync()
+    const address = await Location.reverseGeocodeAsync({
+      latitude: location.coords?.latitude!,
+      longitude: location.coords?.longitude!
+    })
+    requestLocation();
+  }, [])
 
   return (
     <SafeAreaView className='bg-general-500'>
-      <FlatList data={recentRides?.slice(0, 5)} renderItem={({ item }) => <RideCard ride={item} />} keyExtractor={(item) => item.ride_id} />
+      <FlatList 
+      data={recentRides?.slice(0, 5)} 
+      renderItem={({ item }) => <RideCard ride={item} />} 
+      className='px-5' 
+      keyboardShouldPersistTaps='handled' 
+      contentContainerStyle={{ paddingBottom: 100 }}
+      ListEmptyComponent={() => (
+        <View className='flex flex-col items-center justify-center'>
+          { !loading ? (
+            <>
+              <Image source ={images.noResult} className='w-40 h-40 l ' alt='No rides found' resizeMode='contain'/>
+              <Text className='text-sm'>No recent rides found</Text>
+            </> 
+            ) :(
+              <ActivityIndicator size='small' color='#3192ed'/>
+            ) 
+          }
+        </View>
+      )} 
+      ListHeaderComponent={() => (
+        <>
+          <View className='flex flex-row justify-between items-center my-5'>
+            <Text className='text-1xl font-JakartaSemiBold'>Welcome {user?.firstName || user?.emailAddresses[0].emailAddress.split('@')[0]}{" "} 👋</Text>
+            <TouchableOpacity onPress={handleSignOut} className='justify-center items-center w-10 h-10 rounded-full bg-white'>
+              <Image source={icons.out} className='w-4 h-4'/>
+            </TouchableOpacity>
+          </View>
+          <GoogleTextInput 
+            icon ={icons.search}
+            containerStyle='bg-white shadow-md shadow-neutral-300'
+            handlePress={handleDestination}
+          />
+          <>
+          <Text className='text-xl font-JakartaBold mt-5 mb-3'>Your current location.</Text>
+          <View className='flex flex-row items-center bg-transparent h-[300px]'>
+            <Map/>
+          </View>
+          </>
+          <Text className='text-xl font-JakartaBold mt-5 mb-3'>Recent rides.</Text>
+        </>
+      )}
+      />
     </SafeAreaView>
   )
 }
