@@ -9,6 +9,7 @@ import Map from '@/components/Map'
 import { useLocationStore } from '@/store/indes'
 import { useEffect, useState } from 'react'
 import * as Location from "expo-location"
+import React from 'react'
 
 
 const recentRides = [
@@ -118,7 +119,9 @@ export default function Page() {
   const[ hasPermissions, setHasPermissions] = useState(false);
 
   const handleSignOut = () => {}
-  const handleDestination = () => {}
+  const handleDestination = ({latitude: number, longitude: number, address: string}) => {
+    setDestinationLocation(location)
+  }
 
   useEffect( () => {
     const requestLocation = async () => {
@@ -127,12 +130,21 @@ export default function Page() {
         setHasPermissions(false)
         return;
       }
-    }
+    
     let location = await Location.getCurrentPositionAsync()
+
     const address = await Location.reverseGeocodeAsync({
       latitude: location.coords?.latitude!,
       longitude: location.coords?.longitude!
     })
+
+    setUserLocation({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      address: `${address[0].name}, ${address[0].region}`
+    })
+  }
+
     requestLocation();
   }, [])
 

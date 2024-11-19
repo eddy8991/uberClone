@@ -1,6 +1,8 @@
 /* eslint-disable prettier/prettier */
+import 'react-native-get-random-values';
 import { useAuth } from "@clerk/clerk-expo";
 import { Redirect } from "expo-router";
+import React from 'react';
 
 
 const Home = () =>{

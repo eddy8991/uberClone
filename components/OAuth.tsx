@@ -1,6 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { Image, Text, View } from "react-native";
 import CustomButton from "./CustomButton";
 import { icons } from "@/constants";
+import React from "react";
 
 const OAuth = () => {
   const handleGoogleSignIn = () => {};

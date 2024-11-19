@@ -1,11 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-dupe-keys */
 /** @type {import('tailwindcss').Config} */
-// tailwind.config.js
-
-// tailwind.config.js
-
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
   theme: {
